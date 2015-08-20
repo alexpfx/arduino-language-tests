@@ -1,32 +1,32 @@
-/*
-This is the code to make a LED blink with sound.
-You have to set the threshold so it' sensible enough to make the led blink.
- 
-You connect an LED to PIN13 and the Sound Sensor to Analog Pin 0
- */
+#include <Arduino.h>
 
-int led = 13;
-int threshold = 510;
-int volume;
+int pins[8] = {2, 3, 4, 5, 6, 7, 8, 9};
+int state [8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
 
 void setup() {
-    Serial.begin(9600); // For debugging
-    pinMode(led, OUTPUT);
+    Serial.begin(9600);
+    for (int i = 0 ; i < 8 ; i++){
+        pinMode(pins[i], OUTPUT);
+        digitalWrite(pins[i], LOW);
+    }
+
+
+}
+
+void displayNumber(int number) {
+
+
 }
 
 void loop() {
+    for (int i = 0 ; i < 8 ; i++){
+        delay (2000);
+        state [i] = !state[i];
+        digitalWrite(pins[i], state[i]);
 
-    volume = analogRead(A0); // Reads the value from the Analog PIN A0
-
-    //Debug mode
-    Serial.println(volume);
-
-
-    if(volume>=threshold){
-        digitalWrite(led, HIGH); //Turn ON Led
     }
-    else{
-        digitalWrite(led, LOW); // Turn OFF Led
-    }
+
+
 
 }
