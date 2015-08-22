@@ -1,6 +1,6 @@
 #include <Arduino.h>
 
-int led = 13;
+int led = 10;
 
 void setup() {
     pinMode(led, OUTPUT);
