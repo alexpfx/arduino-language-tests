@@ -1,4 +1,5 @@
 #include <Arduino.h>
+
 int r = 8;
 int g = 9;
 int b = 10;
@@ -9,26 +10,36 @@ void setup() {
     pinMode(b, OUTPUT);
 }
 
+int cr = 0;
+int cg = 0;
+int cb = 0;
+
 void loop() {
 
-    digitalWrite(r, HIGH);
-    digitalWrite(g, HIGH);
-    digitalWrite(b, HIGH);
-
-    delay(2000);
-
-    digitalWrite(r, LOW);
+    analogWrite(r, cr++);
 
 
-    delay(2000);
+    delay(20);
 
-    digitalWrite(g, LOW);
+    analogWrite(g, cg++);
+
+    delay(20);
+
+    analogWrite(b, cb++);
+
+    delay(20);
 
 
-    delay(2000);
+    if (cr == 255) {
+        cr = 1;
+    }
+    if (cb == 255) {
+        cb = 1;
+    }
+    if (cg == 255) {
+        cg = 1;
 
-    digitalWrite(b, LOW);
-
+    }
 
 
 }
