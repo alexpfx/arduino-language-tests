@@ -1,15 +1,20 @@
+#define ON true
+#define OFF false
+#define DEBUG false
+#define DEBUG_DELAY 50
+
 int gndDigits[] = {2, 3, 4, 5};
 int segArray[] = {6, 7, 8, 9, 10, 11, 12};
 
 /*                 A,B,C,D,E,F,G*/
 const int zero[] = {1, 1, 1, 1, 1, 1, 0};
-const int one[] = {0, 0, 1, 1, 0, 0, 0};
+const int one[] = {0, 1, 1, 0, 0, 0, 0};
 const int two[] = {1, 1, 0, 1, 1, 0, 1};
-const int three[] = {1, 0, 0, 1, 1, 1, 1};
+const int three[] = {1, 1, 1, 0, 0, 1, 1};
 const int four[] = {0, 1, 1, 0, 0, 1, 1};
 const int five[] = {1, 0, 1, 1, 0, 1, 1};
 const int six[] = {1, 0, 1, 1, 1, 1, 1};
-const int seven[] = {1, 0, 1, 1, 0, 0, 0};
+const int seven[] = {1, 1, 1, 0, 0, 0, 0};
 const int eight[] = {1, 1, 1, 1, 1, 1, 1};
 const int nine[] = {1, 1, 1, 1, 0, 1, 1};
 
@@ -19,45 +24,60 @@ const int nine[] = {1, 1, 1, 1, 0, 1, 1};
 */
 void setup() {
     Serial.begin(9600);
-    for (int i = 0; i < sizeof(gndDigits); i++) {
+    debug("setup init");
+    for (int i = 0; i < 4; i++) {
         pinMode(gndDigits[i], OUTPUT);
         digitalWrite(gndDigits[i], HIGH);
     }
 
-    for (int j = 0; j < sizeof(segArray); j++) {
+    for (int j = 0; j < 7; j++) {
         pinMode(segArray[j], OUTPUT);
     }
-
+    debug("setup End");
 
 }
 
 void turnOn(const int *const segs) {
-    for (int i = 0; i < sizeof(segArray); i++) {
-        segArray[i] == segs[i];
+    debug("turnOn init");
+
+
+    for (int i = 0; i < 7; i++) {
+        Serial.println ("segs i");
+        Serial.println (i);
+        digitalWrite (segArray [i], segs[i]);
     }
+    Serial.println("end turnOn");
+    Serial.println();
+    debug("turnOn end");
 }
 
 void turnAll(boolean on, int array[]) {
-    for (int i = 0; i < sizeof(array); i++) {
-        digitalWrite(on, array[i]);
+    debug("turnAll init");
+    for (int i = 0; i < 7; i++) {
+        digitalWrite(array[i], on);
     }
+    debug("turnAll end");
 }
 
 void turnDigit(boolean on, int digit) {
-    boolean x = on ? LOW : HIGH;
-    digitalWrite(x, digit);
+    debug("turn digit init");
+    boolean x = on? LOW: HIGH;
+    debug (x);
+    digitalWrite(gndDigits[digit], x);
+
+    debug("turn digit end");
 }
 
-#define on true
-#define off false
 
 void display(int digit, int value) {
-    if (digit >= sizeof(gndDigits) || value < 0 || value > 9) {
+    debug("display init");
+
+    if (digit >= 4 || value < 0 || value > 9) {
         return;
     }
-    Serial.println(value);
-    turnDigit(on, digit);
-    switch (digit) {
+
+    turnDigit(ON, digit);
+    switch (value) {
         case 0:
             turnOn(zero);
             break;
@@ -89,14 +109,40 @@ void display(int digit, int value) {
             turnOn(nine);
             break;
     }
-    delay(1000);
-    turnDigit(off, digit);
-    turnAll(off, segArray);
+    delay (2599);
+    turnAll(OFF, segArray);
+    turnDigit(OFF, digit);
+    debug("display end");
 
 }
 
 void loop() {
+    debug("loop init");
 
-    display(0, random(1, 9));
+    for (int j = 0; j < 4 ; j++){
+        for (int i = 0; i < 9 ; i++){
+            delay(200);
+            display(j, i);
+        }
+    }
+
+    delay(1000);
+    debug("loop end");
+}
+
+
+void debug (char *msg){
+    if (DEBUG){
+        delay (DEBUG_DELAY);
+        Serial.println(msg);
+    }
 
 }
+void debug (boolean msg){
+    if (DEBUG){
+        delay (DEBUG_DELAY);
+        Serial.println(msg);
+    }
+
+}
+
