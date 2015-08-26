@@ -10,7 +10,7 @@ int segArray[] = {6, 7, 8, 9, 10, 11, 12};
 const int zero[] = {1, 1, 1, 1, 1, 1, 0};
 const int one[] = {0, 1, 1, 0, 0, 0, 0};
 const int two[] = {1, 1, 0, 1, 1, 0, 1};
-const int three[] = {1, 1, 1, 0, 0, 1, 1};
+const int three[] = {1, 1, 1, 1, 0, 0, 1};
 const int four[] = {0, 1, 1, 0, 0, 1, 1};
 const int five[] = {1, 0, 1, 1, 0, 1, 1};
 const int six[] = {1, 0, 1, 1, 1, 1, 1};
@@ -51,32 +51,30 @@ void turnOn(const int *const segs) {
     debug("turnOn end");
 }
 
-void turnAll(boolean on, int array[]) {
-    debug("turnAll init");
+void resetSegments() {
     for (int i = 0; i < 7; i++) {
-        digitalWrite(array[i], on);
+        digitalWrite(segArray[i], LOW);
     }
-    debug("turnAll end");
 }
 
-void turnDigit(boolean on, int digit) {
-    debug("turn digit init");
-    boolean x = on? LOW: HIGH;
-    debug (x);
-    digitalWrite(gndDigits[digit], x);
-
-    debug("turn digit end");
+void prepareDigit(int digit) {
+    digitalWrite(gndDigits[digit], LOW);
 }
+
+void resetAllDigits (){
+    for (int i = 0; i < 4; i++){
+        digitalWrite(gndDigits[i], HIGH);
+    }
+}
+
 
 
 void display(int digit, int value) {
     debug("display init");
+    resetAllDigits();
+    resetSegments();
 
-    if (digit >= 4 || value < 0 || value > 9) {
-        return;
-    }
-
-    turnDigit(ON, digit);
+    prepareDigit(digit);
     switch (value) {
         case 0:
             turnOn(zero);
@@ -109,9 +107,8 @@ void display(int digit, int value) {
             turnOn(nine);
             break;
     }
-    delay (2599);
-    turnAll(OFF, segArray);
-    turnDigit(OFF, digit);
+    delay (200);
+
     debug("display end");
 
 }
@@ -120,8 +117,8 @@ void loop() {
     debug("loop init");
 
     for (int j = 0; j < 4 ; j++){
-        for (int i = 0; i < 9 ; i++){
-            delay(200);
+        for (int i = 0; i < 10 ; i++){
+            delay(800);
             display(j, i);
         }
     }
