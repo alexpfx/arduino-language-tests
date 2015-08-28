@@ -1,35 +1,30 @@
-#include <Arduino.h>
-#include <math.h>
 
-const int cmd_size = 1;
+long last = 0;
+const long millis_wait = 1000;
 
-char recebido [cmd_size];
 void setup() {
     Serial.begin(9600);
-
 }
 
 
-int i = 0;
 void loop() {
-    if (Serial.available()){
-        recebido [i] = Serial.read ();
-        i++;
-        if (i == cmd_size - 1){
-            i = 0;
-            recebido [cmd_size - 1] = '\0';
-            interpret [recebido];
+    if (Serial.available()) {
+        char c = Serial.read();
+        if (((millis () - last) > millis_wait)){
+            if (interpret(c)){
+                last = millis ();
+            }
         }
+
     }
 }
 
-void interpret (char cmd []){
-
+boolean interpret(char c) {
+    if (c == 'a') {
+        Serial.print("ok");
+        return true;
+    }
+    return false;
 
 
 }
-
-
-
-
-
