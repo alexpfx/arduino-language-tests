@@ -31,7 +31,6 @@ void loop() {
 
 boolean interpret(char c) {
     if (c == 't') {
-
         return printDistance();
     }
     return false;
@@ -46,6 +45,6 @@ boolean printDistance (){
     digitalWrite (trigPin, LOW);
     x = pulseIn (echoPin, HIGH);
     dist = float (x / 58);
-    Serial.println (dist);
+    Serial.print (dist);
     return true;
 }
