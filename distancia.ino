@@ -1,24 +1,17 @@
-#include <NewPing.h>
-
-
-const float SOUND_SPEED = 340.29; //metros por segundo.
 //lembrete : conectar pino GND antes do VCC para evitar erros segundo o fabricante.
-int trigPin = 9;
-int echoPin = 8;
+const int trigPin = 11;
+const int echoPin =12;
 long last = 0;
 long millis_wait = 1000;
-float distance;
+long x;
+float dist;
 
-NewPing sonar(trigPin, echoPin, 400);
 
 
 void setup() {
     Serial.begin(9600);
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
-
-    digitalWrite(trigPin, LOW);
-    digitalRead (echoPin);
 
 
 }
@@ -46,8 +39,13 @@ boolean interpret(char c) {
 
 
 boolean printDistance (){
-    int uS = sonar.ping();
-    Serial.println(uS / US_ROUNDTRIP_CM);
-
+    digitalWrite (trigPin, LOW);
+    delayMicroseconds(2);
+    digitalWrite (trigPin, HIGH);
+    delayMicroseconds (15);
+    digitalWrite (trigPin, LOW);
+    x = pulseIn (echoPin, HIGH);
+    dist = float (x / 58);
+    Serial.println (dist);
     return true;
 }
